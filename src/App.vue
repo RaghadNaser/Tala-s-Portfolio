@@ -47,13 +47,13 @@ onMounted(() => {
   // Add hover effects to interactive elements
   const interactiveElements = 'a, button, .hover-scale, .magnetic, .interactive-element';
   document.addEventListener('mouseenter', (e) => {
-    if (e.target.matches(interactiveElements)) {
+    if (e.target && e.target.nodeType === 1 && typeof e.target.matches === 'function' && e.target.matches(interactiveElements)) {
       handleMouseEnter();
     }
   }, true);
   
   document.addEventListener('mouseleave', (e) => {
-    if (e.target.matches(interactiveElements)) {
+    if (e.target && e.target.nodeType === 1 && typeof e.target.matches === 'function' && e.target.matches(interactiveElements)) {
       handleMouseLeave();
     }
   }, true);
