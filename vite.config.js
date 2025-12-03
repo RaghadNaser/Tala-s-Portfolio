@@ -3,6 +3,10 @@ import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base: "/vue-landing-page/",
+    base: "/",
     plugins: [vue()],
+    build: {
+        assetsDir: "assets",
+        outDir: "dist",
+    },
 });
