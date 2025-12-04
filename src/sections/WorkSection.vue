@@ -299,7 +299,9 @@ const setActiveFilter = (filter) => {
                                             <!-- Screen -->
                                             <div class="relative bg-black rounded-lg overflow-hidden shadow-2xl border-4 border-gray-700">
                                                 <img :src="project.images[0]" :alt="`${project.title} main screen`" 
-                                                     class="w-full h-auto object-cover" />
+                                                     class="w-full h-auto object-cover" 
+                                                     loading="lazy" 
+                                                     decoding="async" />
                                                 <!-- Subtle overlay on hover -->
                                                 <div class="absolute inset-0 bg-gradient-to-t from-purple-900/40 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                                     <div class="bg-white/20 backdrop-blur-sm rounded-full p-4 transform scale-0 group-hover/img:scale-100 transition-transform duration-300">
@@ -333,7 +335,9 @@ const setActiveFilter = (filter) => {
                                             <!-- Frame with appropriate border -->
                                             <div class="relative bg-gray-900 rounded-lg overflow-hidden border-2 border-gray-700 shadow-inner">
                                                 <img :src="project.images[idx]" :alt="`${project.title} screen ${idx + 1}`" 
-                                                     class="w-full h-auto max-h-[120px] object-contain" />
+                                                     class="w-full h-auto max-h-[120px] object-contain" 
+                                                     loading="lazy" 
+                                                     decoding="async" />
                                             </div>
                                             <!-- Subtle overlay on hover with zoom icon -->
                                             <div class="absolute inset-0 bg-gradient-to-t from-purple-900/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center">
@@ -569,7 +573,9 @@ const setActiveFilter = (filter) => {
                             <img v-if="currentProject" 
                                  :src="currentProject.images[currentImageIndex]" 
                                  :alt="`${currentProject.title} - Screen ${currentImageIndex + 1}`"
-                                 class="w-full h-auto max-h-[60vh] object-contain rounded-xl" />
+                                 class="w-full h-auto max-h-[60vh] object-contain rounded-xl"
+                                 loading="eager"
+                                 decoding="async" />
                         </div>
 
                         <!-- Thumbnails Navigation -->
@@ -583,7 +589,7 @@ const setActiveFilter = (filter) => {
                                                 ? 'border-purple-500 scale-110 shadow-lg shadow-purple-500/50' 
                                                 : 'border-gray-600 hover:border-gray-400 opacity-60 hover:opacity-100'
                                         ]">
-                                    <img :src="img" :alt="`Thumbnail ${idx + 1}`" class="w-full h-full object-cover" />
+                                    <img :src="img" :alt="`Thumbnail ${idx + 1}`" class="w-full h-full object-cover" loading="lazy" decoding="async" />
                                 </button>
                             </div>
                         </Transition>

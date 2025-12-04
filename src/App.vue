@@ -16,17 +16,23 @@ onMounted(() => {
   cursorFollower.className = 'cursor-follower';
   document.body.appendChild(cursorFollower);
 
-  // Mouse move handler
+  // Mouse move handler - Optimized with requestAnimationFrame
+  let mouseMoveTicking = false;
   const handleMouseMove = (e) => {
-    const { clientX: x, clientY: y } = e;
-    
-    cursor.style.left = x + 'px';
-    cursor.style.top = y + 'px';
-    
-    setTimeout(() => {
-      cursorFollower.style.left = x + 'px';
-      cursorFollower.style.top = y + 'px';
-    }, 100);
+    if (!mouseMoveTicking) {
+      requestAnimationFrame(() => {
+        const { clientX: x, clientY: y } = e;
+        
+        cursor.style.left = x + 'px';
+        cursor.style.top = y + 'px';
+        
+        cursorFollower.style.left = x + 'px';
+        cursorFollower.style.top = y + 'px';
+        
+        mouseMoveTicking = false;
+      });
+      mouseMoveTicking = true;
+    }
   };
 
   // Mouse enter handler for interactive elements
@@ -41,8 +47,8 @@ onMounted(() => {
     cursorFollower.classList.remove('cursor-follower-hover');
   };
 
-  // Add event listeners
-  document.addEventListener('mousemove', handleMouseMove);
+  // Add event listeners - with passive flag for better performance
+  document.addEventListener('mousemove', handleMouseMove, { passive: true });
   
   // Add hover effects to interactive elements
   const interactiveElements = 'a, button, .hover-scale, .magnetic, .interactive-element';
@@ -83,13 +89,16 @@ onMounted(() => {
     return;
   };
 
-  // Particle System
+  // Particle System - Optimized for performance
   const createParticleSystem = () => {
     const particlesContainer = document.createElement('div');
     particlesContainer.className = 'particles';
     document.body.appendChild(particlesContainer);
 
-    for (let i = 0; i < 50; i++) {
+    // Reduced from 50 to 20 particles for better performance
+    const particleCount = window.innerWidth < 768 ? 10 : 20;
+    
+    for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('div');
       particle.className = 'particle';
       particle.style.left = Math.random() * 100 + '%';
@@ -98,10 +107,10 @@ onMounted(() => {
       
       // Random colors for particles
       const colors = [
-        'rgba(102, 126, 234, 0.5)',
-        'rgba(118, 75, 162, 0.5)',
-        'rgba(156, 39, 176, 0.5)',
-        'rgba(63, 81, 181, 0.5)'
+        'rgba(102, 126, 234, 0.3)',
+        'rgba(118, 75, 162, 0.3)',
+        'rgba(156, 39, 176, 0.3)',
+        'rgba(63, 81, 181, 0.3)'
       ];
       particle.style.background = colors[Math.floor(Math.random() * colors.length)];
       
@@ -200,14 +209,16 @@ onMounted(() => {
     }, 10000);
   };
 
-  // Advanced Particle Interactions
+  // Advanced Particle Interactions - Optimized with throttling
   const addParticleInteractions = () => {
-    document.addEventListener('mousemove', (e) => {
-      const particles = document.querySelectorAll('.particle');
+    let ticking = false;
+    const particles = document.querySelectorAll('.particle');
+    
+    const updateParticles = (e) => {
       const mouseX = e.clientX;
       const mouseY = e.clientY;
       
-      particles.forEach((particle, index) => {
+      particles.forEach((particle) => {
         const rect = particle.getBoundingClientRect();
         const particleX = rect.left + rect.width / 2;
         const particleY = rect.top + rect.height / 2;
@@ -223,14 +234,23 @@ onMounted(() => {
           particle.style.opacity = 0.8 + force * 0.2;
         } else {
           particle.style.transform = 'translate(0px, 0px) scale(1)';
-          particle.style.opacity = 0.5;
+          particle.style.opacity = 0.3;
         }
       });
-    });
+      
+      ticking = false;
+    };
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!ticking) {
+        requestAnimationFrame(() => updateParticles(e));
+        ticking = true;
+      }
+    }, { passive: true });
   };
 
-  // Initialize effects
-  setTimeout(() => {
+  // Initialize effects - Deferred for better initial load
+  const initializeHeavyEffects = () => {
     addMagneticEffect();
     addParallaxEffect();
     createParticleSystem();
@@ -239,10 +259,19 @@ onMounted(() => {
     add3DTiltEffects();
     addDynamicColors();
     addParticleInteractions();
-    addScrollProgress();
-    addFloatingButton();
     addScrollAnimations();
-  }, 100);
+  };
+  
+  // Critical effects first
+  addScrollProgress();
+  addFloatingButton();
+  
+  // Defer heavy effects - Use requestIdleCallback or fallback
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(initializeHeavyEffects, { timeout: 2000 });
+  } else {
+    setTimeout(initializeHeavyEffects, 500);
+  }
 
   // Store cleanup functions
   // Scroll Progress Bar

@@ -177,6 +177,9 @@ const typeWriter = () => {
                                     src="/images/profile/tala-profile.jpg" 
                                     alt="Tala Sinno Profile" 
                                     class="w-full h-full object-cover professional-profile-image"
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchpriority="high"
                                 />
                                 
                                 <!-- Subtle Overlay for Depth -->

@@ -13,12 +13,12 @@ import downloads from "../data/downloads";
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
                 <div v-for="(download, index) in downloads" :key="download.id" :class="[index === 0 ? 'lg:mb-10' : '', index === 1 ? 'lg:mt-10' : '', index === 2 ? 'lg:mt-20 lg:-mb-10' : '']" class="shadow-lg rounded-lg">
                     <div class="flex justify-center mt-12">
-                        <img :src="download.icon" alt="Browser Logo" />
+                        <img :src="download.icon" alt="Browser Logo" loading="lazy" decoding="async" />
                     </div>
                     <h3 class="text-2xl font-theme-heading font-medium text-center mt-6">{{ download.title }}</h3>
                     <p class="text-md font-theme-content text-theme-grayish-blue text-center mt-3">{{ download.subTitle }}</p>
                     <div class="my-7">
-                        <img class="w-full" src="/images/bg-dots.svg" alt="Dot Backaground" />
+                        <img class="w-full" src="/images/bg-dots.svg" alt="Dot Backaground" loading="lazy" decoding="async" />
                     </div>
                     <div class="flex justify-center mb-8">
                         <LinkButton btn-type="primary" :link="download.link" class="text-sm">Add & Install Extension</LinkButton>
